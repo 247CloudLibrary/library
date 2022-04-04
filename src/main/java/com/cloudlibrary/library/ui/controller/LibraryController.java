@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(value = "도서관 API")
-@RequestMapping("/libraries")
+@RequestMapping(value = "/libraries")
 public class LibraryController {
 
     private final LibraryReadUseCase libraryReadUseCase;
@@ -39,6 +41,9 @@ public class LibraryController {
         if(ObjectUtils.isEmpty(request)){
             // TODO 예외 처리
         }
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Timestamp currentTime = Timestamp.valueOf(localDateTime);
         var command = LibraryOperationUseCase.LibraryCreatedCommand.builder()
                 .id(request.getId())
                 .name(request.getName())
@@ -46,6 +51,14 @@ public class LibraryController {
                 .email(request.getEmail())
                 .tel(request.getTel())
                 .holiday(request.getHoliday())
+                .operatingTime(request.getOperatingTime())
+                .loanAvailability(request.getLoanAvailability())
+                .createdAt(currentTime)
+                .updatedAt(currentTime)
+                .lendingAvailableCount(request.getLendingAvailableCount())
+                .lendingAvailableDays(request.getLendingAvailableDays())
+                .overdueCount(request.getOverdueCount())
+                .lendingLimitDays(request.getLendingLimitDays())
                 .build();
 
         var result = libraryOperationUseCase.createLibrary(command);
@@ -70,19 +83,6 @@ public class LibraryController {
     @GetMapping("/{id}")
     public ResponseEntity<LibraryView> getLibraries(@PathVariable("id") long id){
 
-        // id를 갖는 임의 도서관 도메인 생성
-        var command = LibraryOperationUseCase.LibraryCreatedCommand.builder()
-                .id(id)
-                .name(id + " 테스트 생성된 도서관")
-                .address("서울시 강서구 공항동 444-3")
-                .email("test@google.com")
-                .tel("02-1111-2222")
-                .holiday("월")
-                .build();
-
-        var created = libraryOperationUseCase.createLibrary(command);
-
-        // 임시 생성된 도서관을 단일 조회
         LibraryReadUseCase.LibraryFindQuery query = new LibraryReadUseCase.LibraryFindQuery(id);
         LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
 
@@ -109,6 +109,8 @@ public class LibraryController {
     @PutMapping("/{id}")
     public ResponseEntity<LibraryView> updateLibrary(@RequestBody LibraryUpdateRequest request, @PathVariable("id") long id){
 
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Timestamp currentTime = Timestamp.valueOf(localDateTime);
         var command = LibraryOperationUseCase.LibraryUpdateCommand.builder()
                 .id(request.getId())
                 .name(request.getName())
@@ -116,6 +118,13 @@ public class LibraryController {
                 .email(request.getEmail())
                 .tel(request.getTel())
                 .holiday(request.getHoliday())
+                .operatingTime(request.getOperatingTime())
+                .loanAvailability(request.getLoanAvailability())
+                .updatedAt(currentTime)
+                .lendingAvailableCount(request.getLendingAvailableCount())
+                .lendingAvailableDays(request.getLendingAvailableDays())
+                .overdueCount(request.getOverdueCount())
+                .lendingLimitDays(request.getLendingLimitDays())
                 .build();
 
         LibraryEntity libraryEntity = libraryOperationUseCase.updateLibrary(command);
