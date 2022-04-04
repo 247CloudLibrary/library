@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.sql.Timestamp;
+
 public interface LibraryOperationUseCase {
 
     LibraryReadUseCase.FindLibraryResult createLibrary(LibraryCreatedCommand command);
@@ -17,12 +19,25 @@ public interface LibraryOperationUseCase {
     @Getter
     @ToString
     class LibraryCreatedCommand{
+        // library Info
         private final long id;
         private final String name;
         private final String address;
         private final String email;
         private final String tel;
         private final String holiday;
+        private final String operatingTime;
+        private final String loanAvailability;
+        private final Timestamp createdAt;
+        private final Timestamp updatedAt;
+
+
+        // library rules
+        private final int lendingAvailableCount;
+        private final int lendingAvailableDays;
+        private final int overdueCount;
+        private final int longtermOverdueDays;
+        private final int lendingLimitDays;
     }
 
     @EqualsAndHashCode(callSuper = false)
@@ -30,12 +45,25 @@ public interface LibraryOperationUseCase {
     @Getter
     @ToString
     class LibraryUpdateCommand{
+        // library Info
         private final long id;
         private final String name;
         private final String address;
         private final String email;
         private final String tel;
         private final String holiday;
+        private final String operatingTime;
+        private final String loanAvailability;
+        private final Timestamp createdAt;
+        private final Timestamp updatedAt;
+
+
+        // library rules
+        private final int lendingAvailableCount;
+        private final int lendingAvailableDays;
+        private final int overdueCount;
+        private final int longtermOverdueDays;
+        private final int lendingLimitDays;
     }
 
     @EqualsAndHashCode(callSuper = false)
