@@ -4,6 +4,7 @@ import com.cloudlibrary.library.application.domain.Library;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Component
@@ -28,12 +29,26 @@ public interface LibraryReadUseCase {
     @ToString
     @Builder
     class FindLibraryResult{
+        // library Info
         private final long id;
         private final String name;
         private final String address;
         private final String email;
         private final String tel;
         private final String holiday;
+        private final String operatingTime;
+        private final String loanAvailability;
+        private final Timestamp createdAt;
+        private final Timestamp updatedAt;
+
+
+        // library rules
+        private final int lendingAvailableCount;
+        private final int lendingAvailableDays;
+        private final int overdueCount;
+        private final int longtermOverdueDays;
+        private final int lendingLimitDays;
+
 
         public static FindLibraryResult findByLibrary(Library library){
             return FindLibraryResult.builder()
@@ -43,6 +58,15 @@ public interface LibraryReadUseCase {
                     .email(library.getEmail())
                     .tel(library.getTel())
                     .holiday(library.getHoliday())
+                    .operatingTime(library.getOperatingTime())
+                    .loanAvailability(library.getLoanAvailability())
+                    .createdAt(library.getCreatedAt())
+                    .updatedAt(library.getUpdatedAt())
+                    .lendingAvailableCount(library.getLendingAvailableCount())
+                    .lendingLimitDays(library.getLendingLimitDays())
+                    .overdueCount(library.getOverdueCount())
+                    .longtermOverdueDays(library.getLongtermOverdueDays())
+                    .lendingLimitDays(library.getLendingLimitDays())
                     .build();
         }
     }
