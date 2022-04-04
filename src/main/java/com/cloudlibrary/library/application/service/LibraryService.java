@@ -14,12 +14,12 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCase {
-    private final MemoryEntityRepository memoryLibraryRepository;
+    private final MemoryEntityRepository libraryRepository;
 
 
     @Autowired
-    public LibraryService(MemoryEntityRepository memoryLibraryRepository) {
-        this.memoryLibraryRepository = memoryLibraryRepository;
+    public LibraryService(MemoryEntityRepository libraryRepository) {
+        this.libraryRepository = libraryRepository;
     }
 
 
@@ -27,7 +27,7 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
     @Override
     public FindLibraryResult createLibrary(LibraryCreatedCommand command) {
 
-        var created = memoryLibraryRepository.create(command);
+        var created = libraryRepository.create(command);
         return FindLibraryResult.findByLibrary(created.toLibrary());
 
     }
@@ -36,7 +36,7 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
     public List<FindLibraryResult> getLibraryListAll() {
 
         ArrayList<FindLibraryResult> results = new ArrayList<>();
-        List<Library> libraries = memoryLibraryRepository.findLibraryAll();
+        List<Library> libraries = libraryRepository.findLibraryAll();
 
         for (Library library : libraries) {
             results.add(FindLibraryResult.findByLibrary(library));
@@ -47,7 +47,7 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
     @Override
     public FindLibraryResult getLibrary(LibraryFindQuery query) {
 
-        Optional<Library> result = memoryLibraryRepository.findLIbraryById(query.getLibraryId());
+        Optional<Library> result = libraryRepository.findLIbraryById(query.getLibraryId());
         return FindLibraryResult.findByLibrary(result.get());
 
     }
@@ -55,14 +55,14 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
     @Override
     public LibraryEntity updateLibrary(LibraryUpdateCommand command) {
 
-        LibraryEntity update = memoryLibraryRepository.update(command);
+        LibraryEntity update = libraryRepository.update(command);
         // for debugging
         return update;
     }
 
     @Override
     public LibraryFindQuery deleteLibrary(LibraryDeleteCommand command) {
-        LibraryFindQuery query = memoryLibraryRepository.delete(command);
+        LibraryFindQuery query = libraryRepository.delete(command);
         // for debugging
 
         return query;
