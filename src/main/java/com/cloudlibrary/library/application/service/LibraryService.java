@@ -1,6 +1,7 @@
 package com.cloudlibrary.library.application.service;
 
 import com.cloudlibrary.library.application.domain.Library;
+import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
 import com.cloudlibrary.library.infrastructure.persistance.memory.repository.MemoryEntityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
     public LibraryService(MemoryEntityRepository memoryLibraryRepository) {
         this.memoryLibraryRepository = memoryLibraryRepository;
     }
+
+
 
     @Override
     public FindLibraryResult createLibrary(LibraryCreatedCommand command) {
@@ -48,4 +51,21 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
         return FindLibraryResult.findByLibrary(result.get());
 
     }
+
+    @Override
+    public LibraryEntity updateLibrary(LibraryUpdateCommand command) {
+
+        LibraryEntity update = memoryLibraryRepository.update(command);
+        // for debugging
+        return update;
+    }
+
+    @Override
+    public LibraryFindQuery deleteLibrary(LibraryDeleteCommand command) {
+        LibraryFindQuery query = memoryLibraryRepository.delete(command);
+        // for debugging
+
+        return query;
+    }
+
 }
