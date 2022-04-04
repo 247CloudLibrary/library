@@ -63,7 +63,7 @@ public interface LibraryReadUseCase {
                     .createdAt(library.getCreatedAt())
                     .updatedAt(library.getUpdatedAt())
                     .lendingAvailableCount(library.getLendingAvailableCount())
-                    .lendingLimitDays(library.getLendingLimitDays())
+                    .lendingAvailableDays(library.getLendingAvailableDays())
                     .overdueCount(library.getOverdueCount())
                     .longtermOverdueDays(library.getLongtermOverdueDays())
                     .lendingLimitDays(library.getLendingLimitDays())
