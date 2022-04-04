@@ -58,6 +58,7 @@ public class LibraryController {
                 .lendingAvailableCount(request.getLendingAvailableCount())
                 .lendingAvailableDays(request.getLendingAvailableDays())
                 .overdueCount(request.getOverdueCount())
+                .longtermOverdueDays(request.getLongtermOverdueDays())
                 .lendingLimitDays(request.getLendingLimitDays())
                 .build();
 
@@ -124,6 +125,7 @@ public class LibraryController {
                 .lendingAvailableCount(request.getLendingAvailableCount())
                 .lendingAvailableDays(request.getLendingAvailableDays())
                 .overdueCount(request.getOverdueCount())
+                .longtermOverdueDays(request.getLongtermOverdueDays())
                 .lendingLimitDays(request.getLendingLimitDays())
                 .build();
 
