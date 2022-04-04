@@ -4,7 +4,9 @@ package com.cloudlibrary.library.ui.controller;
 import com.cloudlibrary.library.application.domain.Library;
 import com.cloudlibrary.library.application.service.LibraryOperationUseCase;
 import com.cloudlibrary.library.application.service.LibraryReadUseCase;
+import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
 import com.cloudlibrary.library.ui.requestBody.LibraryCreateRequest;
+import com.cloudlibrary.library.ui.requestBody.LibraryUpdateRequest;
 import com.cloudlibrary.library.ui.view.library.LibraryView;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +91,36 @@ public class LibraryController {
     }
 
     //TODO 도서관 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<LibraryView> deleteLibrary(@PathVariable("id") long id){
+        var command = LibraryOperationUseCase.LibraryDeleteCommand.builder()
+                .id(id)
+                .build();
 
+        LibraryReadUseCase.LibraryFindQuery libraryFindQuery = libraryOperationUseCase.deleteLibrary(command);
+        var result = LibraryReadUseCase.FindLibraryResult.builder()
+                .id(libraryFindQuery.getLibraryId())
+                .build();
+
+        return ResponseEntity.ok(new LibraryView(result));
+
+    }
     //TODO 도서관 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<LibraryView> updateLibrary(@RequestBody LibraryUpdateRequest request, @PathVariable("id") long id){
+
+        var command = LibraryOperationUseCase.LibraryUpdateCommand.builder()
+                .id(request.getId())
+                .name(request.getName())
+                .address(request.getAddress())
+                .email(request.getEmail())
+                .tel(request.getTel())
+                .holiday(request.getHoliday())
+                .build();
+
+        LibraryEntity libraryEntity = libraryOperationUseCase.updateLibrary(command);
+        var query = new LibraryReadUseCase.LibraryFindQuery(id);
+        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
+        return ResponseEntity.ok(new LibraryView(result));
+    }
 }
