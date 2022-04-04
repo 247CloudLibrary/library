@@ -1,6 +1,7 @@
 package com.cloudlibrary.library.ui.controller;
 
 
+import com.cloudlibrary.library.application.domain.Library;
 import com.cloudlibrary.library.application.service.LibraryOperationUseCase;
 import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.ui.view.library.LibraryView;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,7 +38,13 @@ public class LibraryController {
     @GetMapping("")
     public ResponseEntity<List<LibraryView>> getLibraries(){
 
-        return null;
+
+        List<LibraryReadUseCase.FindLibraryResult> libraries = libraryReadUseCase.getLibraryListAll();
+        ArrayList<LibraryView> libraryViews = new ArrayList<>();
+        for (LibraryReadUseCase.FindLibraryResult library : libraries) {
+            libraryViews.add(new LibraryView(library));
+        }
+        return ResponseEntity.ok(libraryViews);
     }
 
     //TODO 특정 도서관 조회
@@ -53,7 +61,12 @@ public class LibraryController {
                 .holiday("월")
                 .build();
 
-        var result = libraryOperationUseCase.createLibrary(command);
+        var created = libraryOperationUseCase.createLibrary(command);
+
+        // 임시 생성된 도서관을 단일 조회
+        LibraryReadUseCase.LibraryFindQuery query = new LibraryReadUseCase.LibraryFindQuery(id);
+        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
+
         return ResponseEntity.ok(new LibraryView(result));
 
     }
