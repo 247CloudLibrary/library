@@ -9,10 +9,22 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class LibraryCreateRequest {
+
+    // library Info
     private long id;
     private String name;
     private String address;
     private String email;
     private String tel;
     private String holiday;
+    private String operatingTime;
+    private String loanAvailability;
+
+
+    // library rules
+    private int lendingAvailableCount;
+    private int lendingAvailableDays;
+    private int overdueCount;
+    private int longtermOverdueDays;
+    private int lendingLimitDays;
 }
