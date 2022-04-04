@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class LibraryUpdateRequest {
+    private long id;
     private String name;
     private String address;
     private String email;
