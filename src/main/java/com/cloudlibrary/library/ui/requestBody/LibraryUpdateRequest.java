@@ -17,4 +17,14 @@ public class LibraryUpdateRequest {
     private String email;
     private String tel;
     private String holiday;
+    private String operatingTime;
+    private String loanAvailability;
+
+
+    // library rules
+    private int lendingAvailableCount;
+    private int lendingAvailableDays;
+    private int overdueCount;
+    private int longtermOverdueDays;
+    private int lendingLimitDays;
 }
