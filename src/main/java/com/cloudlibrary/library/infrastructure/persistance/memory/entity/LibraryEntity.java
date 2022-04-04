@@ -1,4 +1,4 @@
-package com.cloudlibrary.library.infrastructure.persistance.Memory.Entity;
+package com.cloudlibrary.library.infrastructure.persistance.memory.entity;
 
 
 import com.cloudlibrary.library.application.domain.Library;
