@@ -1,11 +1,14 @@
 package com.cloudlibrary.library.application.service;
 
+import com.cloudlibrary.library.application.domain.Library;
 import com.cloudlibrary.library.infrastructure.persistance.Memory.repository.MemoryEntityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,11 +31,21 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
 
     @Override
     public List<FindLibraryResult> getLibraryListAll() {
-        return null;
+
+        ArrayList<FindLibraryResult> results = new ArrayList<>();
+        List<Library> libraries = memoryLibraryRepository.findLibraryAll();
+
+        for (Library library : libraries) {
+            results.add(FindLibraryResult.findByLibrary(library));
+        }
+        return results;
     }
 
     @Override
     public FindLibraryResult getLibrary(LibraryFindQuery query) {
-        return null;
+
+        Optional<Library> result = memoryLibraryRepository.findLIbraryById(query.getLibraryId());
+        return FindLibraryResult.findByLibrary(result.get());
+
     }
 }
