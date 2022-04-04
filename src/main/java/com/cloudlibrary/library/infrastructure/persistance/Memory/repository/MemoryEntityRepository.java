@@ -6,10 +6,7 @@ import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.infrastructure.persistance.Memory.Entity.LibraryEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class MemoryEntityRepository implements LibraryEntityRepository{
@@ -31,11 +28,21 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
 
     @Override
     public Optional<Library> findLIbraryById(long libraryId) {
-        return Optional.empty();
+
+        LibraryEntity result = store.get(libraryId);
+        return Optional.of(result.toLibrary());
     }
 
     @Override
     public List<Library> findLibraryAll() {
-        return null;
+
+        ArrayList<Library> libraries = new ArrayList<>();
+
+        for (Long id : store.keySet()) {
+            libraries.add(store.get(id).toLibrary());
+        }
+
+        return libraries;
+
     }
 }
