@@ -2,6 +2,7 @@ package com.cloudlibrary.library.infrastructure.persistance.memory.repository;
 
 import com.cloudlibrary.library.application.domain.Library;
 import com.cloudlibrary.library.application.service.LibraryOperationUseCase;
+import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,16 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
     @Override
     public LibraryEntity create(LibraryOperationUseCase.LibraryCreatedCommand command) {
 
+        var libraryDomain = Library.builder()
+                .id(command.getId())
+                .name(command.getName())
+                .address(command.getAddress())
+                .email(command.getEmail())
+                .tel(command.getTel())
+                .holiday(command.getHoliday())
+                .build();
 
-        LibraryEntity libraryEntity = new LibraryEntity(command.getId(), command.getName(), command.getAddress(),
-                command.getEmail(), command.getTel(), command.getHoliday());
-
+        LibraryEntity libraryEntity = new LibraryEntity(libraryDomain);
         store.put(command.getId(), libraryEntity);
 
         return libraryEntity;
@@ -42,6 +49,54 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
         }
 
         return libraries;
+    }
+
+    @Override
+    public LibraryEntity update(LibraryOperationUseCase.LibraryUpdateCommand command) {
+
+        // check command's libraryId whether it exist in memory
+        Optional<Library> isExist = findLIbraryById(command.getId());
+        if(isExist.isPresent()){
+            var libraryDomain = Library.builder()
+                    .id(command.getId())
+                    .name(command.getName())
+                    .address(command.getAddress())
+                    .email(command.getEmail())
+                    .tel(command.getTel())
+                    .holiday(command.getHoliday())
+                    .build();
+
+            LibraryEntity updatedLibraryEntity = new LibraryEntity(libraryDomain);
+            store.replace(command.getId(), updatedLibraryEntity);
+            return updatedLibraryEntity;
+        }
+        else{
+            // error
+            return null;
+        }
+
 
     }
+
+    @Override
+    public LibraryReadUseCase.LibraryFindQuery delete(LibraryOperationUseCase.LibraryDeleteCommand command) {
+
+        // check command's libraryId whether it exist in memory
+        Optional<Library> isExist = findLIbraryById(command.getId());
+        if(isExist.isPresent()){
+
+            LibraryReadUseCase.LibraryFindQuery query = new LibraryReadUseCase.LibraryFindQuery(command.getId());
+            store.remove(command.getId());
+            return query;
+        }
+        else{
+
+            return null;
+        }
+
+
+
+    }
+
+
 }
