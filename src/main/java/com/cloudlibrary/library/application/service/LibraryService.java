@@ -1,7 +1,7 @@
 package com.cloudlibrary.library.application.service;
 
 import com.cloudlibrary.library.application.domain.Library;
-import com.cloudlibrary.library.infrastructure.persistance.Memory.repository.MemoryEntityRepository;
+import com.cloudlibrary.library.infrastructure.persistance.memory.repository.MemoryEntityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

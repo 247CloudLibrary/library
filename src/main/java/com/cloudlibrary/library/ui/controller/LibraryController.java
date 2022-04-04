@@ -4,15 +4,14 @@ package com.cloudlibrary.library.ui.controller;
 import com.cloudlibrary.library.application.domain.Library;
 import com.cloudlibrary.library.application.service.LibraryOperationUseCase;
 import com.cloudlibrary.library.application.service.LibraryReadUseCase;
+import com.cloudlibrary.library.ui.requestBody.LibraryCreateRequest;
 import com.cloudlibrary.library.ui.view.library.LibraryView;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,24 @@ public class LibraryController {
         this.libraryOperationUseCase = libraryOperationUseCase;
     }
     //TODO 도서관 등록
+    @PostMapping("")
+    public ResponseEntity<LibraryView> createLibrary(@RequestBody LibraryCreateRequest request){
+        if(ObjectUtils.isEmpty(request)){
+            // TODO 예외 처리
+        }
+        var command = LibraryOperationUseCase.LibraryCreatedCommand.builder()
+                .id(request.getId())
+                .name(request.getName())
+                .address(request.getAddress())
+                .email(request.getEmail())
+                .tel(request.getTel())
+                .holiday(request.getHoliday())
+                .build();
+
+        var result = libraryOperationUseCase.createLibrary(command);
+        return ResponseEntity.ok(new LibraryView(result));
+
+    }
 
     //TODO 도서관 LIST 조회
     @GetMapping("")
