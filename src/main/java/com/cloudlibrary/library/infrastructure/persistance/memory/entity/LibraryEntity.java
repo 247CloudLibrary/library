@@ -21,13 +21,13 @@ public class LibraryEntity implements Serializable {
     private String tel;
     private String holiday;
 
-    public LibraryEntity(long id, String name, String address, String email, String tel, String holiday) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.tel = tel;
-        this.holiday = holiday;
+    public LibraryEntity(Library library) {
+        this.id = library.getId();
+        this.name = library.getName();
+        this.address = library.getAddress();
+        this.email = library.getEmail();
+        this.tel = library.getTel();
+        this.holiday = getHoliday();
     }
 
     public Library toLibrary(){
