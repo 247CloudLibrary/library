@@ -1,6 +1,7 @@
 package com.cloudlibrary.library.ui.view.library;
 
 
+import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -26,12 +27,12 @@ public class LibraryView {
     @ApiModelProperty("도서관 휴일")
     private final String holiday;
 
-    public LibraryView(long id, String name, String address, String email, String tel, String holiday) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.tel = tel;
-        this.holiday = holiday;
+    public LibraryView(LibraryReadUseCase.FindLibraryResult result) {
+        this.id = result.getId();
+        this.name = result.getName();
+        this.address = result.getAddress();
+        this.email = result.getEmail();
+        this.tel = result.getTel();
+        this.holiday = result.getHoliday();
     }
 }
