@@ -6,6 +6,8 @@ import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -23,6 +25,15 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
                 .email(command.getEmail())
                 .tel(command.getTel())
                 .holiday(command.getHoliday())
+                .operatingTime(command.getOperatingTime())
+                .loanAvailability(command.getLoanAvailability())
+                .createdAt(command.getCreatedAt())
+                .updatedAt(command.getUpdatedAt())
+                .lendingAvailableCount(command.getLendingAvailableCount())
+                .lendingAvailableDays(command.getLendingAvailableDays())
+                .overdueCount(command.getOverdueCount())
+                .longtermOverdueDays(command.getLongtermOverdueDays())
+                .lendingLimitDays(command.getLendingLimitDays())
                 .build();
 
         LibraryEntity libraryEntity = new LibraryEntity(libraryDomain);
@@ -64,6 +75,15 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
                     .email(command.getEmail())
                     .tel(command.getTel())
                     .holiday(command.getHoliday())
+                    .operatingTime(command.getOperatingTime())
+                    .loanAvailability(command.getLoanAvailability())
+                    .createdAt(isExist.get().getCreatedAt())
+                    .updatedAt(command.getUpdatedAt())
+                    .lendingAvailableCount(command.getLendingAvailableCount())
+                    .lendingAvailableDays(command.getLendingAvailableDays())
+                    .overdueCount(command.getOverdueCount())
+                    .longtermOverdueDays(command.getLongtermOverdueDays())
+                    .lendingLimitDays(command.getLendingLimitDays())
                     .build();
 
             LibraryEntity updatedLibraryEntity = new LibraryEntity(libraryDomain);
