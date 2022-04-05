@@ -14,7 +14,7 @@ public interface LibraryEntityRepository {
     LibraryEntity update(LibraryOperationUseCase.LibraryUpdateCommand command);
     LibraryReadUseCase.LibraryFindQuery delete(LibraryOperationUseCase.LibraryDeleteCommand command);
 
-    Optional<Library> findLIbraryById(long libraryId);
+    Optional<Library> findLibraryById(long libraryId);
     List<Library> findLibraryAll();
 
 
