@@ -1,4 +1,4 @@
-package com.cloudlibrary.doc;
+package com.cloudlibrary.library.doc;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
