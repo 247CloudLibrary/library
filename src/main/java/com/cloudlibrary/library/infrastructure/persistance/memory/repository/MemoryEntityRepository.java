@@ -6,8 +6,7 @@ import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 import java.util.*;
 
 @Component
@@ -26,7 +25,6 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
                 .tel(command.getTel())
                 .holiday(command.getHoliday())
                 .operatingTime(command.getOperatingTime())
-                .loanAvailability(command.getLoanAvailability())
                 .createdAt(command.getCreatedAt())
                 .updatedAt(command.getUpdatedAt())
                 .lendingAvailableCount(command.getLendingAvailableCount())
@@ -44,7 +42,7 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
     }
 
     @Override
-    public Optional<Library> findLIbraryById(long libraryId) {
+    public Optional<Library> findLibraryById(long libraryId) {
 
         LibraryEntity result = store.get(libraryId);
         return Optional.of(result.toLibrary());
@@ -66,7 +64,7 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
     public LibraryEntity update(LibraryOperationUseCase.LibraryUpdateCommand command) {
 
         // check command's libraryId whether it exist in memory
-        Optional<Library> isExist = findLIbraryById(command.getId());
+        Optional<Library> isExist = findLibraryById(command.getId());
         if(isExist.isPresent()){
             var libraryDomain = Library.builder()
                     .id(command.getId())
@@ -76,7 +74,6 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
                     .tel(command.getTel())
                     .holiday(command.getHoliday())
                     .operatingTime(command.getOperatingTime())
-                    .loanAvailability(command.getLoanAvailability())
                     .createdAt(isExist.get().getCreatedAt())
                     .updatedAt(command.getUpdatedAt())
                     .lendingAvailableCount(command.getLendingAvailableCount())
@@ -102,7 +99,7 @@ public class MemoryEntityRepository implements LibraryEntityRepository{
     public LibraryReadUseCase.LibraryFindQuery delete(LibraryOperationUseCase.LibraryDeleteCommand command) {
 
         // check command's libraryId whether it exist in memory
-        Optional<Library> isExist = findLIbraryById(command.getId());
+        Optional<Library> isExist = findLibraryById(command.getId());
         if(isExist.isPresent()){
 
             LibraryReadUseCase.LibraryFindQuery query = new LibraryReadUseCase.LibraryFindQuery(command.getId());

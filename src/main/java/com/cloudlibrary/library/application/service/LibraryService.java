@@ -47,7 +47,7 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
     @Override
     public FindLibraryResult getLibrary(LibraryFindQuery query) {
 
-        Optional<Library> result = libraryRepository.findLIbraryById(query.getLibraryId());
+        Optional<Library> result = libraryRepository.findLibraryById(query.getLibraryId());
         return FindLibraryResult.findByLibrary(result.get());
 
     }
