@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -20,8 +20,8 @@ public class Library {
     private final String tel;
     private final String holiday;
     private final String operatingTime;
-    private final Timestamp createdAt;
-    private final Timestamp updatedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
 
     // library rules
