@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,9 +24,8 @@ public class LibraryEntity implements Serializable {
     private String tel;
     private String holiday;
     private String operatingTime;
-    private String loanAvailability;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 
     // library rules
@@ -43,7 +43,6 @@ public class LibraryEntity implements Serializable {
         this.tel = library.getTel();
         this.holiday = library.getHoliday();
         this.operatingTime = library.getOperatingTime();
-        this.loanAvailability = library.getLoanAvailability();
         this.createdAt = library.getCreatedAt();
         this.updatedAt = library.getUpdatedAt();
 
@@ -63,7 +62,6 @@ public class LibraryEntity implements Serializable {
                 .tel(this.tel)
                 .holiday(this.holiday)
                 .operatingTime(this.operatingTime)
-                .loanAvailability(this.loanAvailability)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
                 .lendingAvailableCount(this.lendingAvailableCount)
