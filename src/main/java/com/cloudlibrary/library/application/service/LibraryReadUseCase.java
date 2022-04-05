@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -30,16 +31,15 @@ public interface LibraryReadUseCase {
     @Builder
     class FindLibraryResult{
         // library Info
-        private final long id;
+        private final Long id;
         private final String name;
         private final String address;
         private final String email;
         private final String tel;
         private final String holiday;
         private final String operatingTime;
-        private final String loanAvailability;
-        private final Timestamp createdAt;
-        private final Timestamp updatedAt;
+        private final LocalDateTime createdAt;
+        private final LocalDateTime updatedAt;
 
 
         // library rules
@@ -59,7 +59,6 @@ public interface LibraryReadUseCase {
                     .tel(library.getTel())
                     .holiday(library.getHoliday())
                     .operatingTime(library.getOperatingTime())
-                    .loanAvailability(library.getLoanAvailability())
                     .createdAt(library.getCreatedAt())
                     .updatedAt(library.getUpdatedAt())
                     .lendingAvailableCount(library.getLendingAvailableCount())

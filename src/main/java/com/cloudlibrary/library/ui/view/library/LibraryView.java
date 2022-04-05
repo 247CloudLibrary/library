@@ -3,13 +3,12 @@ package com.cloudlibrary.library.ui.view.library;
 
 import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,7 +17,7 @@ import java.sql.Timestamp;
 public class LibraryView {
 
     @ApiModelProperty(value = "library ID")
-    private final long id;
+    private final Long id;
     @ApiModelProperty(value = "도서관 이름")
     private final String name;
     @ApiModelProperty(value = "도서관 주소")
@@ -31,12 +30,10 @@ public class LibraryView {
     private final String holiday;
     @ApiModelProperty("도서관 운영 시간")
     private final String operatingTime;
-    @ApiModelProperty("대출 가능 여부")
-    private final String loanAvailability;
     @ApiModelProperty("도서관 첫 등록 시간")
-    private final Timestamp createdAt;
+    private final LocalDateTime createdAt;
     @ApiModelProperty("도서관 업데이트 시간")
-    private final Timestamp updatedAt;
+    private final LocalDateTime updatedAt;
     @ApiModelProperty("대출 가능 횟수")
     private final int lendingAvailableCount;
     @ApiModelProperty("대출 기간")
@@ -56,7 +53,6 @@ public class LibraryView {
         this.tel = result.getTel();
         this.holiday = result.getHoliday();
         this.operatingTime = result.getOperatingTime();
-        this.loanAvailability = result.getLoanAvailability();
         this.createdAt = result.getCreatedAt();
         this.updatedAt = result.getUpdatedAt();
         this.lendingAvailableCount = result.getLendingAvailableCount();

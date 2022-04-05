@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public interface LibraryOperationUseCase {
 
@@ -20,16 +21,15 @@ public interface LibraryOperationUseCase {
     @ToString
     class LibraryCreatedCommand{
         // library Info
-        private final long id;
+        private final Long id;
         private final String name;
         private final String address;
         private final String email;
         private final String tel;
         private final String holiday;
         private final String operatingTime;
-        private final String loanAvailability;
-        private final Timestamp createdAt;
-        private final Timestamp updatedAt;
+        private final LocalDateTime createdAt;
+        private final LocalDateTime updatedAt;
 
 
         // library rules
@@ -46,7 +46,7 @@ public interface LibraryOperationUseCase {
     @ToString
     class LibraryUpdateCommand{
         // library Info
-        private final long id;
+        private final Long id;
         private final String name;
         private final String address;
         private final String email;
@@ -54,8 +54,8 @@ public interface LibraryOperationUseCase {
         private final String holiday;
         private final String operatingTime;
         private final String loanAvailability;
-        private final Timestamp createdAt;
-        private final Timestamp updatedAt;
+        private final LocalDateTime createdAt;
+        private final LocalDateTime updatedAt;
 
 
         // library rules
@@ -71,7 +71,7 @@ public interface LibraryOperationUseCase {
     @Getter
     @ToString
     class LibraryDeleteCommand{
-        private final long id;
+        private final Long id;
     }
 
 
