@@ -13,14 +13,13 @@ import java.sql.Timestamp;
 public class Library {
 
     // library Info
-    private final long id;
+    private final Long id;
     private final String name;
     private final String address;
     private final String email;
     private final String tel;
     private final String holiday;
     private final String operatingTime;
-    private final String loanAvailability;
     private final Timestamp createdAt;
     private final Timestamp updatedAt;
 
