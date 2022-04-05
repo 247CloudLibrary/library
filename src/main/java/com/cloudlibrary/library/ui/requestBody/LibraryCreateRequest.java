@@ -11,14 +11,13 @@ import lombok.ToString;
 public class LibraryCreateRequest {
 
     // library Info
-    private long id;
+    private Long id;
     private String name;
     private String address;
     private String email;
     private String tel;
     private String holiday;
     private String operatingTime;
-    private String loanAvailability;
 
 
     // library rules
