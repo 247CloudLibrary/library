@@ -72,12 +72,29 @@ public class LibraryController {
     @GetMapping("")
     public ResponseEntity<ApiResponseView<List<LibraryView>>> getLibraries(){
 
+        List<LibraryView> libraryViews = new ArrayList<>();
 
-        List<LibraryReadUseCase.FindLibraryResult> libraries = libraryReadUseCase.getLibraryListAll();
-        ArrayList<LibraryView> libraryViews = new ArrayList<>();
-        for (LibraryReadUseCase.FindLibraryResult library : libraries) {
-            libraryViews.add(new LibraryView(library));
+        for (Long i=1L; i <= 10L; ++i){
+            Library library = Library.builder()
+                    .id(i)
+                    .name("테스트 도서관 " + i)
+                    .address("테스트 도서관 주소")
+                    .email("테스트 도서관 이메일")
+                    .tel("02-1111-2222")
+                    .holiday("월 수")
+                    .operatingTime("09:00 ~ 17:00")
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .lendingAvailableCount(10)
+                    .lendingAvailableDays(20)
+                    .overdueCount(30)
+                    .longtermOverdueDays(40)
+                    .lendingLimitDays(50)
+                    .build();
+            libraryViews.add(new LibraryView(LibraryReadUseCase.FindLibraryResult.findByLibrary(library)));
         }
+
+
         return ResponseEntity.ok(new ApiResponseView<>(libraryViews));
     }
 
@@ -85,10 +102,25 @@ public class LibraryController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseView<LibraryView>> getLibraries(@PathVariable("id") Long id){
 
-        LibraryReadUseCase.LibraryFindQuery query = new LibraryReadUseCase.LibraryFindQuery(id);
-        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
+        Library library = Library.builder()
+                .id(id)
+                .name("테스트 도서관 " + id)
+                .address("테스트 도서관 주소")
+                .email("테스트 도서관 이메일")
+                .tel("02-1111-2222")
+                .holiday("월 수")
+                .operatingTime("09:00 ~ 17:00")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .lendingAvailableCount(10)
+                .lendingAvailableDays(20)
+                .overdueCount(30)
+                .longtermOverdueDays(40)
+                .lendingLimitDays(50)
+                .build();
 
-        return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
+        return ResponseEntity.ok(new ApiResponseView<>
+                (new LibraryView(LibraryReadUseCase.FindLibraryResult.findByLibrary(library))));
 
     }
 
@@ -112,7 +144,7 @@ public class LibraryController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseView<LibraryView>> updateLibrary(@RequestBody LibraryUpdateRequest request, @PathVariable("id") Long id){
 
-        var command = LibraryOperationUseCase.LibraryUpdateCommand.builder()
+        var responseBody = LibraryReadUseCase.FindLibraryResult.builder()
                 .id(request.getId())
                 .name(request.getName())
                 .address(request.getAddress())
@@ -128,9 +160,9 @@ public class LibraryController {
                 .lendingLimitDays(request.getLendingLimitDays())
                 .build();
 
-        LibraryEntity libraryEntity = libraryOperationUseCase.updateLibrary(command);
-        var query = new LibraryReadUseCase.LibraryFindQuery(id);
-        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
-        return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
+//        LibraryEntity libraryEntity = libraryOperationUseCase.updateLibrary(command);
+//        var query = new LibraryReadUseCase.LibraryFindQuery(id);
+//        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
+        return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(responseBody)));
     }
 }
