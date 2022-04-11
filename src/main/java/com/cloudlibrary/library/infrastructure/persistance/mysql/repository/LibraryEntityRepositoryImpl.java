@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
@@ -37,12 +38,8 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
         List<LibraryEntity> libraryEntities = entityManager.createQuery("select libraries from LibraryEntity libraries", LibraryEntity.class)
                 .getResultList();
 
-        List<Library> libraries = new ArrayList<>();
-
-        for (LibraryEntity libraryEntity : libraryEntities) {
-            libraries.add(libraryEntity.toLibrary());
-        }
-        return libraries;
+        return libraryEntities.stream().map(LibraryEntity::toLibrary).
+                collect(Collectors.toList());
     }
 
     @Override
@@ -60,6 +57,9 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
 
     @Override
     public Long deleteLibrary(LibraryEntity libraryEntity) {
+
+
+
         return null;
     }
 }
