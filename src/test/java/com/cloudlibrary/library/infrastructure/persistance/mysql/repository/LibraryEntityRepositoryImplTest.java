@@ -26,7 +26,7 @@ class LibraryEntityRepositoryImplTest {
     public void findByIdTest() throws Exception
     {
         //given
-        Library library = Library.builder()
+        Library library1 = Library.builder()
                 .name("test 도서관")
                 .address("test 도서관 주소")
                 .email("test 도서관 이메일")
@@ -42,13 +42,33 @@ class LibraryEntityRepositoryImplTest {
                 .lendingLimitDays(3)
                 .build();
 
-        LibraryEntity libraryEntity = new LibraryEntity(library);
+        Library library2 = Library.builder()
+                .name("test 도서관2")
+                .address("test 도서관 주소2")
+                .email("test 도서관 이메일2")
+                .tel("02-1111-33333")
+                .holiday("월 목")
+                .operatingTime("01:00 ~ 12:00")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .lendingAvailableCount(3)
+                .lendingAvailableDays(2)
+                .overdueCount(1)
+                .longtermOverdueDays(6)
+                .lendingLimitDays(2)
+                .build();
+
+        LibraryEntity libraryEntity1 = new LibraryEntity(library1);
+        LibraryEntity libraryEntity2 = new LibraryEntity(library2);
         //when
-        Optional<Library> library1 = libraryEntityRepository.saveLibrary(libraryEntity);
+        Optional<Library> libraryResult1 = libraryEntityRepository.saveLibrary(libraryEntity1);
+        Optional<Library> libraryResult2 = libraryEntityRepository.saveLibrary(libraryEntity2);
 
         //then
         assertThat(libraryEntityRepository.
-                findLibraryById(libraryEntity.getId()).get().getId()).isEqualTo(library1.get().getId());
+                findLibraryById(libraryEntity1.getId()).get().getId()).isEqualTo(libraryResult1.get().getId());
+        assertThat(2L).isEqualTo(libraryResult2.get().getId());
+
 
     }
 }
