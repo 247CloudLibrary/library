@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,16 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
 
     @Override
     public List<Library> findLibraryAll() {
-        return null;
+
+        List<LibraryEntity> libraryEntities = entityManager.createQuery("select libraries from LibraryEntity libraries", LibraryEntity.class)
+                .getResultList();
+
+        List<Library> libraries = new ArrayList<>();
+
+        for (LibraryEntity libraryEntity : libraryEntities) {
+            libraries.add(libraryEntity.toLibrary());
+        }
+        return libraries;
     }
 
     @Override
@@ -45,6 +55,7 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
     @Override
     public Optional<Library> updateLibrary(LibraryEntity libraryEntity) {
         return Optional.empty();
+
     }
 
     @Override
