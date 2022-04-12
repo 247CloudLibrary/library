@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -103,7 +102,6 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
                 .tel(command.getTel())
                 .holiday(command.getHoliday())
                 .operatingTime(command.getOperatingTime())
-                .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .lendingAvailableCount(command.getLendingAvailableCount())
                 .lendingAvailableDays(command.getLendingAvailableDays())
