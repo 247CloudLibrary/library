@@ -8,10 +8,10 @@ import java.util.Optional;
 
 public interface LibraryEntityRepository {
 
-    Optional<Library> findLibraryById(Long libraryId);
-    List<Library> findLibraryAll();
-    Optional<Library> saveLibrary(LibraryEntity libraryEntity);
-    Optional<Library> updateLibrary(LibraryEntity libraryEntity);
+    Optional<LibraryEntity> findLibraryById(Long libraryId);
+    List<LibraryEntity> findLibraryAll();
+    Optional<LibraryEntity> saveLibrary(LibraryEntity libraryEntity);
+    Optional<LibraryEntity> updateLibrary(LibraryEntity libraryEntity);
     Long deleteLibrary(LibraryEntity libraryEntity);
 
 }

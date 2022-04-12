@@ -18,46 +18,36 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
     private EntityManager entityManager;
 
     @Override
-    public Optional<Library> findLibraryById(Long libraryId) {
+    public Optional<LibraryEntity> findLibraryById(Long libraryId) {
 
-        LibraryEntity findLibraryEntity = entityManager.find(LibraryEntity.class, libraryId);
 
-        // 못 찾은 경우 findLibraryEntity는 null이 들어감
-        if(findLibraryEntity == null){
-            return Optional.empty();
-        }
-
-        Library library = findLibraryEntity.toLibrary();
-        return Optional.of(library);
+        return Optional.empty();
 
     }
 
     @Override
-    public List<Library> findLibraryAll() {
+    public List<LibraryEntity> findLibraryAll() {
 
-        List<LibraryEntity> libraryEntities = entityManager.createQuery("select libraries from LibraryEntity libraries", LibraryEntity.class)
-                .getResultList();
-
-        return libraryEntities.stream().map(LibraryEntity::toLibrary).
-                collect(Collectors.toList());
+        return null;
     }
 
     @Override
-    public Optional<Library> saveLibrary(LibraryEntity libraryEntity) {
+    public Optional<LibraryEntity> saveLibrary(LibraryEntity libraryEntity) {
 
-        entityManager.persist(libraryEntity);
-        return Optional.ofNullable(libraryEntity.toLibrary());
+        return Optional.empty();
+
     }
 
     @Override
-    public Optional<Library> updateLibrary(LibraryEntity libraryEntity) {
+    public Optional<LibraryEntity> updateLibrary(LibraryEntity libraryEntity) {
+
+
         return Optional.empty();
 
     }
 
     @Override
     public Long deleteLibrary(LibraryEntity libraryEntity) {
-
 
 
         return null;
