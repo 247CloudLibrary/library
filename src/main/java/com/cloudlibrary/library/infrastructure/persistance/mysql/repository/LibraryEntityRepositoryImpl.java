@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-@Transactional
 public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
 
     @PersistenceContext
@@ -40,6 +39,7 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Optional<LibraryEntity> saveLibrary(LibraryEntity libraryEntity) {
 
         entityManager.persist(libraryEntity);
@@ -48,6 +48,7 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Optional<LibraryEntity> updateLibrary(LibraryEntity libraryEntity) {
 
         // 업데이트 할 도서관 아이디로 조회
@@ -66,6 +67,7 @@ public class LibraryEntityRepositoryImpl implements LibraryEntityRepository{
 
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Long deleteLibrary(Long libraryId) {
 
         // 삭제할 도서관 Entity 조회
