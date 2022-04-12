@@ -12,6 +12,6 @@ public interface LibraryEntityRepository {
     List<LibraryEntity> findLibraryAll();
     Optional<LibraryEntity> saveLibrary(LibraryEntity libraryEntity);
     Optional<LibraryEntity> updateLibrary(LibraryEntity libraryEntity);
-    Long deleteLibrary(LibraryEntity libraryEntity);
+    Long deleteLibrary(Long libraryId);
 
 }
