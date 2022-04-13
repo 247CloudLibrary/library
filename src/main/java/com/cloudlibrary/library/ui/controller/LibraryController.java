@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @Api(value = "도서관 API")
+@CrossOrigin(origins = "http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com/*")
 @RequestMapping(value = "/v1/libraries")
 public class LibraryController {
 
