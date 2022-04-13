@@ -78,8 +78,8 @@ public class LibraryController {
         for (Long i=1L; i <= 10L; ++i){
             Library library = Library.builder()
                     .id(i)
-                    .name("테스트 도서관 " + i)
-                    .address("테스트 도서관 주소")
+                    .name("테스트 도서관 입니다. " + i)
+                    .address("테스트 도서관 주소 입니다.")
                     .email("테스트 도서관 이메일")
                     .tel("02-1111-2222")
                     .holiday("월 수")
@@ -105,8 +105,8 @@ public class LibraryController {
 
         Library library = Library.builder()
                 .id(id)
-                .name("테스트 도서관 " + id)
-                .address("테스트 도서관 주소")
+                .name("테스트 도서관 입니다." + id)
+                .address("테스트 도서관 주소 입니다.")
                 .email("테스트 도서관 이메일")
                 .tel("02-1111-2222")
                 .holiday("월 수")
