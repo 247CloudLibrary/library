@@ -25,6 +25,7 @@ import java.util.List;
 
 
 @Slf4j
+@CrossOrigin(origins = "*")
 @RestController
 @Api(value = "도서관 API")
 @RequestMapping(value = "/v1/libraries")
