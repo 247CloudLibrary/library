@@ -40,7 +40,6 @@ public class LibraryController {
     }
     //TODO 도서관 등록
     @PostMapping("")
-    @CrossOrigin(origins = {"http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com", "http://localhost:3000"})
     public ResponseEntity<ApiResponseView<LibraryView>> createLibrary(@RequestBody LibraryCreateRequest request){
         if(ObjectUtils.isEmpty(request)){
             // TODO 예외 처리
@@ -71,7 +70,6 @@ public class LibraryController {
 
     //TODO 도서관 LIST 조회
     @GetMapping("")
-    @CrossOrigin(origins = {"http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com", "http://localhost:3000"})
     public ResponseEntity<ApiResponseView<List<LibraryView>>> getLibraries(){
 
         List<LibraryView> libraryViews = new ArrayList<>();
@@ -102,7 +100,6 @@ public class LibraryController {
 
     //TODO 특정 도서관 조회
     @GetMapping("/{id}")
-    @CrossOrigin(origins = {"http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com", "http://localhost:3000"})
     public ResponseEntity<ApiResponseView<LibraryView>> getLibraries(@PathVariable("id") Long id){
 
         Library library = Library.builder()
@@ -129,7 +126,6 @@ public class LibraryController {
 
     //TODO 도서관 삭제
     @DeleteMapping("/{id}")
-    @CrossOrigin(origins = {"http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com", "http://localhost:3000"})
     public ResponseEntity<ApiResponseView<LibraryView>> deleteLibrary(@PathVariable("id") Long id){
         var command = LibraryOperationUseCase.LibraryDeleteCommand.builder()
                 .id(id)
@@ -146,7 +142,6 @@ public class LibraryController {
 
     //TODO 도서관 수정
     @PutMapping("/{id}")
-    @CrossOrigin(origins = {"http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com", "http://localhost:3000"})
     public ResponseEntity<ApiResponseView<LibraryView>> updateLibrary(@RequestBody LibraryUpdateRequest request, @PathVariable("id") Long id){
 
         var responseBody = LibraryReadUseCase.FindLibraryResult.builder()
