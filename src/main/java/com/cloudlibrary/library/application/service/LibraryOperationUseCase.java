@@ -1,6 +1,7 @@
 package com.cloudlibrary.library.application.service;
 
-import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
+
+import com.cloudlibrary.library.infrastructure.persistance.mysql.entity.LibraryEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 public interface LibraryOperationUseCase {
 
     LibraryReadUseCase.FindLibraryResult createLibrary(LibraryCreatedCommand command);
-    LibraryEntity updateLibrary(LibraryUpdateCommand command);
+    LibraryReadUseCase.FindLibraryResult updateLibrary(LibraryUpdateCommand command);
     LibraryReadUseCase.LibraryFindQuery deleteLibrary(LibraryDeleteCommand command);
 
     @EqualsAndHashCode(callSuper = false)
