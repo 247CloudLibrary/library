@@ -40,6 +40,10 @@ public class LibraryController {
         this.libraryOperationUseCase = libraryOperationUseCase;
     }
 
+    @GetMapping("/health-check")
+    public ResponseEntity<String> check() {
+        return ResponseEntity.ok("health-check");
+    }
 
     @PostMapping("")
     public ResponseEntity<ApiResponseView<LibraryView>> createLibrary(@RequestBody LibraryCreateRequest request){
