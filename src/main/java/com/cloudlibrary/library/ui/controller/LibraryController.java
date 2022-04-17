@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
+@CrossOrigin(origins = "*")
 @RestController
 @Api(value = "도서관 API")
-@CrossOrigin(origins = {"http://ec2-3-36-85-185.ap-northeast-2.compute.amazonaws.com", "http://localhost:3000"})
 @RequestMapping(value = "/v1/libraries")
 public class LibraryController {
 
@@ -86,7 +86,8 @@ public class LibraryController {
 
         if(libraries.isEmpty()) {
             throw new CloudLibraryException(MessageType.NOT_FOUND);
-        }
+
+     
 
         List<LibraryView> libraryViews = libraries.stream().map(LibraryView::new).collect(Collectors.toList());
 
@@ -96,6 +97,7 @@ public class LibraryController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseView<LibraryView>> getLibraries(@PathVariable("id") Long id){
 
+
         LibraryReadUseCase.LibraryFindQuery command = new LibraryReadUseCase.LibraryFindQuery(id);
 
         LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(command);
@@ -103,6 +105,7 @@ public class LibraryController {
         if(result.getId() == -1){
             throw new CloudLibraryException(MessageType.NOT_FOUND);
         }
+
 
         return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
 
