@@ -86,7 +86,7 @@ public class LibraryController {
 
         if(libraries.isEmpty()) {
             throw new CloudLibraryException(MessageType.NOT_FOUND);
-
+        }
      
 
         List<LibraryView> libraryViews = libraries.stream().map(LibraryView::new).collect(Collectors.toList());
