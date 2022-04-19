@@ -84,9 +84,9 @@ public class LibraryController {
 
         List<LibraryReadUseCase.FindLibraryResult> libraries = libraryReadUseCase.getLibraryListAll();
 
-        if(libraries.isEmpty()) {
+        if(libraries == null) {
             throw new CloudLibraryException(MessageType.NOT_FOUND);
-
+        }
      
 
         List<LibraryView> libraryViews = libraries.stream().map(LibraryView::new).collect(Collectors.toList());
