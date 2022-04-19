@@ -1,8 +1,7 @@
 package com.cloudlibrary.library.application.service;
 
+
 import com.cloudlibrary.library.application.domain.Library;
-
-
 import com.cloudlibrary.library.infrastructure.persistance.mysql.entity.LibraryEntity;
 import com.cloudlibrary.library.infrastructure.persistance.mysql.repository.LibraryEntityRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
 public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCase {
+
     private final LibraryEntityRepository libraryRepository;
 
 
@@ -27,8 +27,7 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
 
     @Override
     public FindLibraryResult createLibrary(LibraryCreatedCommand command) {
-
-        var newLibrary = Library.builder()
+        var library = Library.builder()
                 .id(command.getId())
                 .name(command.getName())
                 .address(command.getAddress())
@@ -45,97 +44,99 @@ public class LibraryService implements LibraryOperationUseCase, LibraryReadUseCa
                 .lendingLimitDays(command.getLendingLimitDays())
                 .build();
 
-        var savedLibraryEntity = libraryRepository.saveLibrary(new LibraryEntity(newLibrary));
+        var libraryEntity = new LibraryEntity(library);
+        var result = libraryRepository.save(libraryEntity);
 
-        // Library Post Success
-        if(savedLibraryEntity.isPresent()){
-            return FindLibraryResult.findByLibrary(savedLibraryEntity.get().toLibrary());
-        }
 
-        // Library Post Failed
-        return libraryServiceFailedSequence();
-
+        return FindLibraryResult.findByLibrary(result.toLibrary());
     }
-
 
     @Override
     public FindLibraryResult getLibrary(LibraryFindQuery query) {
 
-        var result = libraryRepository.findLibraryById(query.getLibraryId());
-        if(result.isPresent()){
-            return FindLibraryResult.findByLibrary(result.get().toLibrary());
+        var libraryEntity = libraryRepository.findById(query.getLibraryId());
+
+        if(libraryEntity.isPresent()){
+            return FindLibraryResult.findByLibrary(libraryEntity.get().toLibrary());
         }
 
-        return libraryServiceFailedSequence();
+        
+        return notFoundLibrary();
     }
+
 
 
     @Override
     public List<FindLibraryResult> getLibraryListAll() {
 
+        var libraryEntities = libraryRepository.findAll();
 
-        var libraryEntities = libraryRepository.findLibraryAll();
-        if(libraryEntities.isEmpty()){
-            List<FindLibraryResult> failed = new ArrayList<>();
-            failed.add(libraryServiceFailedSequence());
-            return failed;
+        var libraries = StreamSupport.stream(libraryEntities.spliterator(), false)
+                .map(LibraryEntity::toLibrary)
+                .collect(Collectors.toList());
+
+        if (libraries.isEmpty()) {
+            return null;
         }
-
-        var libraries = libraryEntities.stream()
-                                        .map(LibraryEntity::toLibrary)
-                                        .collect(Collectors.toList());
-
+        
         return libraries.stream().map(FindLibraryResult::findByLibrary).collect(Collectors.toList());
-
+        
     }
-
-
 
     @Override
     public FindLibraryResult updateLibrary(LibraryUpdateCommand command) {
 
-        var newLibrary = Library.builder()
-                .id(command.getId())
-                .name(command.getName())
-                .address(command.getAddress())
-                .email(command.getEmail())
-                .tel(command.getTel())
-                .holiday(command.getHoliday())
-                .operatingTime(command.getOperatingTime())
-                .updatedAt(LocalDateTime.now())
-                .lendingAvailableCount(command.getLendingAvailableCount())
-                .lendingAvailableDays(command.getLendingAvailableDays())
-                .overdueCount(command.getOverdueCount())
-                .longtermOverdueDays(command.getLongtermOverdueDays())
-                .lendingLimitDays(command.getLendingLimitDays())
-                .build();
 
-        var updatedLibraryEntity = libraryRepository.updateLibrary(new LibraryEntity(newLibrary));
+        var oldLibrary = libraryRepository.findById(command.getId());
+        if(oldLibrary.isPresent()){
+            var newLibrary = Library.builder()
+                    .id(oldLibrary.get().getId())
+                    .name(command.getName())
+                    .address(command.getAddress())
+                    .email(command.getEmail())
+                    .tel(command.getTel())
+                    .holiday(command.getHoliday())
+                    .operatingTime(command.getOperatingTime())
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .lendingAvailableCount(command.getLendingAvailableCount())
+                    .lendingAvailableDays(command.getLendingAvailableDays())
+                    .overdueCount(command.getOverdueCount())
+                    .longtermOverdueDays(command.getLongtermOverdueDays())
+                    .lendingLimitDays(command.getLendingLimitDays())
+                    .build();
 
-        if(updatedLibraryEntity.isPresent()){
-            return FindLibraryResult.findByLibrary(updatedLibraryEntity.get().toLibrary());
+            var result = libraryRepository.save(new LibraryEntity(newLibrary));
+
+            return FindLibraryResult.findByLibrary(result.toLibrary());
+
         }
 
-        return libraryServiceFailedSequence();
+
+        return notFoundLibrary();
     }
 
     @Override
     public LibraryFindQuery deleteLibrary(LibraryDeleteCommand command) {
-        var deleteLibraryId = libraryRepository.deleteLibrary(command.getId());
 
-        if(deleteLibraryId != null){
-            LibraryFindQuery libraryFindQuery = new LibraryFindQuery(deleteLibraryId);
+        var query = libraryRepository.findById(command.getId());
+
+        if(query.isPresent()){
+            var libraryFindQuery = new LibraryFindQuery(query.get().getId());
+            libraryRepository.delete(query.get());
+
             return libraryFindQuery;
         }
 
-        return new LibraryFindQuery(libraryServiceFailedSequence().getId());
+
+        return new LibraryFindQuery(-1L);
     }
 
 
-
-    private FindLibraryResult libraryServiceFailedSequence() {
+    private FindLibraryResult notFoundLibrary() {
         return FindLibraryResult.findByLibrary(Library.builder()
                 .id(-1L)
                 .build());
     }
+
 }
