@@ -6,7 +6,7 @@ import com.cloudlibrary.library.application.service.LibraryOperationUseCase;
 import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.exception.CloudLibraryException;
 import com.cloudlibrary.library.exception.MessageType;
-import com.cloudlibrary.library.infrastructure.persistance.memory.entity.LibraryEntity;
+
 import com.cloudlibrary.library.ui.requestBody.LibraryCreateRequest;
 import com.cloudlibrary.library.ui.requestBody.LibraryUpdateRequest;
 import com.cloudlibrary.library.ui.view.ApiResponseView;
@@ -18,13 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
+@CrossOrigin(origins = "*")
 @RestController
 @Api(value = "도서관 API")
 @RequestMapping(value = "/v1/libraries")
@@ -38,11 +39,16 @@ public class LibraryController {
         this.libraryReadUseCase = libraryReadUseCase;
         this.libraryOperationUseCase = libraryOperationUseCase;
     }
-    //TODO 도서관 등록
+
+    @GetMapping("/health-check")
+    public ResponseEntity<String> check() {
+        return ResponseEntity.ok("health-check");
+    }
+
     @PostMapping("")
     public ResponseEntity<ApiResponseView<LibraryView>> createLibrary(@RequestBody LibraryCreateRequest request){
+
         if(ObjectUtils.isEmpty(request)){
-            // TODO 예외 처리
             throw new CloudLibraryException(MessageType.BAD_REQUEST);
         }
 
@@ -64,63 +70,44 @@ public class LibraryController {
                 .build();
 
         var result = libraryOperationUseCase.createLibrary(command);
+
+        if(result.getId() == -1){
+            throw new CloudLibraryException(MessageType.INTERNAL_SERVER_ERROR);
+        }
+
         return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
 
     }
 
-    //TODO 도서관 LIST 조회
     @GetMapping("")
     public ResponseEntity<ApiResponseView<List<LibraryView>>> getLibraries(){
 
-        List<LibraryView> libraryViews = new ArrayList<>();
+        List<LibraryReadUseCase.FindLibraryResult> libraries = libraryReadUseCase.getLibraryListAll();
 
-        for (Long i=1L; i <= 10L; ++i){
-            Library library = Library.builder()
-                    .id(i)
-                    .name("테스트 도서관 " + i)
-                    .address("테스트 도서관 주소")
-                    .email("테스트 도서관 이메일")
-                    .tel("02-1111-2222")
-                    .holiday("월 수")
-                    .operatingTime("09:00 ~ 17:00")
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .lendingAvailableCount(10)
-                    .lendingAvailableDays(20)
-                    .overdueCount(30)
-                    .longtermOverdueDays(40)
-                    .lendingLimitDays(50)
-                    .build();
-            libraryViews.add(new LibraryView(LibraryReadUseCase.FindLibraryResult.findByLibrary(library)));
-        }
+        if(libraries.isEmpty()) {
+            throw new CloudLibraryException(MessageType.NOT_FOUND);
 
+     
+
+        List<LibraryView> libraryViews = libraries.stream().map(LibraryView::new).collect(Collectors.toList());
 
         return ResponseEntity.ok(new ApiResponseView<>(libraryViews));
     }
 
-    //TODO 특정 도서관 조회
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseView<LibraryView>> getLibraries(@PathVariable("id") Long id){
 
-        Library library = Library.builder()
-                .id(id)
-                .name("테스트 도서관 " + id)
-                .address("테스트 도서관 주소")
-                .email("테스트 도서관 이메일")
-                .tel("02-1111-2222")
-                .holiday("월 수")
-                .operatingTime("09:00 ~ 17:00")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .lendingAvailableCount(10)
-                .lendingAvailableDays(20)
-                .overdueCount(30)
-                .longtermOverdueDays(40)
-                .lendingLimitDays(50)
-                .build();
 
-        return ResponseEntity.ok(new ApiResponseView<>
-                (new LibraryView(LibraryReadUseCase.FindLibraryResult.findByLibrary(library))));
+        LibraryReadUseCase.LibraryFindQuery command = new LibraryReadUseCase.LibraryFindQuery(id);
+
+        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(command);
+
+        if(result.getId() == -1){
+            throw new CloudLibraryException(MessageType.NOT_FOUND);
+        }
+
+
+        return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
 
     }
 
@@ -132,19 +119,23 @@ public class LibraryController {
                 .build();
 
         LibraryReadUseCase.LibraryFindQuery libraryFindQuery = libraryOperationUseCase.deleteLibrary(command);
+
+        if(libraryFindQuery.getLibraryId() == -1){
+            throw new CloudLibraryException(MessageType.NOT_FOUND);
+        }
+
         var result = LibraryReadUseCase.FindLibraryResult.builder()
                 .id(libraryFindQuery.getLibraryId())
                 .build();
 
         return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
-
     }
 
     //TODO 도서관 수정
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseView<LibraryView>> updateLibrary(@RequestBody LibraryUpdateRequest request, @PathVariable("id") Long id){
 
-        var responseBody = LibraryReadUseCase.FindLibraryResult.builder()
+        var updateLibrary = LibraryOperationUseCase.LibraryUpdateCommand.builder()
                 .id(request.getId())
                 .name(request.getName())
                 .address(request.getAddress())
@@ -160,9 +151,11 @@ public class LibraryController {
                 .lendingLimitDays(request.getLendingLimitDays())
                 .build();
 
-//        LibraryEntity libraryEntity = libraryOperationUseCase.updateLibrary(command);
-//        var query = new LibraryReadUseCase.LibraryFindQuery(id);
-//        LibraryReadUseCase.FindLibraryResult result = libraryReadUseCase.getLibrary(query);
-        return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(responseBody)));
+        LibraryReadUseCase.FindLibraryResult updatedLibrary = libraryOperationUseCase.updateLibrary(updateLibrary);
+        if(updatedLibrary.getId() == -1){
+            throw new CloudLibraryException(MessageType.INTERNAL_SERVER_ERROR);
+        }
+
+        return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(updatedLibrary)));
     }
 }
