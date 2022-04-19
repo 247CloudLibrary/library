@@ -1,27 +1,28 @@
 package com.cloudlibrary.library.application.service;
 
-import org.junit.jupiter.api.*;
+import com.cloudlibrary.library.infrastructure.persistance.mysql.repository.LibraryEntityRepository;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 class LibraryServiceTest {
 
-    @Autowired LibraryService libraryService;
-
+    @Autowired
+    LibraryService libraryService;
 
     @Test
     @Order(1)
-    @Transactional
-    @DisplayName("도서관 등록 서비스 테스트")
     public void createLibraryTest() throws Exception
     {
         //given
@@ -55,87 +56,85 @@ class LibraryServiceTest {
         LibraryReadUseCase.FindLibraryResult library1 = libraryService.createLibrary(command1);
         LibraryReadUseCase.FindLibraryResult library2 = libraryService.createLibrary(command2);
         //then
-        assertThat(library1.getId()).isEqualTo(1L);
-
     }
 
     @Test
     @Order(2)
-    @Transactional
-    @DisplayName("특정 도서관 조회 테스트")
-    public void getLibraryTest() throws Exception
+    public void findLibraryByIdTest() throws Exception
     {
         //given
-
+        var command1 = LibraryOperationUseCase.LibraryCreatedCommand.builder()
+                .id(1L)
+                .name("request.getName()")
+                .address("request.getAddress()")
+                .email("request.getEmail()")
+                .tel("request.getTel()")
+                .holiday("request.getHoliday()")
+                .operatingTime("request.getOperatingTime()")
+                .lendingAvailableCount(1)
+                .lendingAvailableDays(2)
+                .overdueCount(3)
+                .longtermOverdueDays(4)
+                .lendingLimitDays(5)
+                .build();
         //when
-        LibraryReadUseCase.FindLibraryResult foundLibrary = libraryService.getLibrary(new LibraryReadUseCase.LibraryFindQuery(1L));
+         var query = new LibraryReadUseCase.LibraryFindQuery(1L);
 
         //then
-        assertThat(foundLibrary.getId()).isEqualTo(1L);
+        assertThat(libraryService.getLibrary(query).getId()).isEqualTo(1L);
     }
-
+    
     @Test
-    @Order(3)
-    @DisplayName("등록되어 있는 모든 도서관 조회 테스트")
-    public void getLibraryListAllTest() throws Exception
+    public void getLibraryAllTest() throws Exception
     {
         //given
-
+        
         //when
-        List<LibraryReadUseCase.FindLibraryResult> libraryListAll = libraryService.getLibraryListAll();
-
+        var libraryListAll = libraryService.getLibraryListAll();
         //then
-        assertThat(libraryListAll.get(0).getId()).isEqualTo(1L);
-        assertThat(libraryListAll.get(1).getId()).isEqualTo(2L);
         for (LibraryReadUseCase.FindLibraryResult findLibraryResult : libraryListAll) {
-            System.out.println(findLibraryResult.toString());
+            System.out.println("findLibraryResult.toString() = " + findLibraryResult.toString());
         }
     }
 
     @Test
-    @Order(4)
-    @Transactional
-    @DisplayName("도서관 정보 수정 서비스 테스트")
     public void updateLibraryTest() throws Exception
     {
         //given
         var command1 = LibraryOperationUseCase.LibraryUpdateCommand.builder()
                 .id(1L)
-                .name("수정된 도서관 이름")
-                .address("수정된 도서관 주소")
-                .email("수정된 도서관 이메일")
-                .tel("수정된 도서관 전화번호")
+                .name("updated name")
+                .address("updated address")
+                .email("request.getEmail()")
+                .tel("request.getTel()")
                 .holiday("request.getHoliday()")
                 .operatingTime("request.getOperatingTime()")
-                .lendingAvailableCount(3)
+                .lendingAvailableCount(8)
                 .lendingAvailableDays(4)
-                .overdueCount(5)
-                .longtermOverdueDays(6)
-                .lendingLimitDays(7)
+                .overdueCount(3)
+                .longtermOverdueDays(2)
+                .lendingLimitDays(1)
                 .build();
         //when
-
-        LibraryReadUseCase.FindLibraryResult findLibraryResult = libraryService.updateLibrary(command1);
-        LibraryReadUseCase.FindLibraryResult compare = libraryService.getLibrary(new LibraryReadUseCase.LibraryFindQuery(1L));
+        libraryService.updateLibrary(command1);
         //then
-        assertThat(compare.toString()).isEqualTo(findLibraryResult.toString());
-
+        assertThat(libraryService.getLibrary(new LibraryReadUseCase.LibraryFindQuery(1L)).getName()).isEqualTo("updated name");
     }
 
     @Test
-    @Order(5)
-    @Transactional
-    @DisplayName("도서관 삭제 서비스 테스트")
+    @Order(4)
     public void deleteLibraryTest() throws Exception
     {
         //given
         var command = LibraryOperationUseCase.LibraryDeleteCommand.builder()
-                .id(1L)
+                .id(2L)
                 .build();
         //when
-        LibraryReadUseCase.FindLibraryResult beforeDelete = libraryService.getLibrary(new LibraryReadUseCase.LibraryFindQuery(1L));
-        LibraryReadUseCase.LibraryFindQuery deletedLibraryId = libraryService.deleteLibrary(command);
+        libraryService.deleteLibrary(command);
         //then
-        assertThat(beforeDelete.toString()).isNotEqualTo(libraryService.getLibrary(new LibraryReadUseCase.LibraryFindQuery(1L)).toString());
+        var result = libraryService.getLibraryListAll();
+        for (LibraryReadUseCase.FindLibraryResult findLibraryResult : result) {
+            System.out.println("findLibraryResult = " + findLibraryResult);
+        }
     }
 }

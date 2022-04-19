@@ -18,24 +18,32 @@ public class LibraryEntity {
 
     @Id @GeneratedValue
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String address;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String tel;
+    @Column(nullable = false)
     private String holiday;
+    @Column(nullable = false)
     private String  operatingTime;
+    @Column(nullable = true)
     private LocalDateTime createdAt;
+    @Column(nullable = true)
     private LocalDateTime updatedAt;
 
-    @Column(name = "lending_available_count")
+    @Column(nullable = false)
     private int lendingAvailableCount;
-    @Column(name = "lending_available_days")
+    @Column(nullable = false)
     private int lendingAvailableDays;
-    @Column(name = "overdue_count")
+    @Column(nullable = false)
     private int overdueCount;
-    @Column(name = "longterm_overdue_days")
+    @Column(nullable = false)
     private int longtermOverdueDays;
-    @Column(name = "lending_limit_days")
+    @Column(nullable = false)
     private int lendingLimitsDays;
 
 
