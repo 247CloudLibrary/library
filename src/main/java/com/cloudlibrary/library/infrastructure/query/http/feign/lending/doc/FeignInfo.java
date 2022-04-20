@@ -1,4 +1,4 @@
-package com.cloudlibrary.library.infrastructure.feign.lending.doc;
+package com.cloudlibrary.library.infrastructure.query.http.feign.lending.doc;
 
 public class FeignInfo {
 

@@ -1,4 +1,4 @@
-package com.cloudlibrary.library.infrastructure.feign.lending.responsebody;
+package com.cloudlibrary.library.infrastructure.query.http.feign.lending.responsebody;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,6 @@
-package com.cloudlibrary.library.infrastructure.feign.lending.service;
+package com.cloudlibrary.library.infrastructure.query.http.feign.lending.service;
 
-import com.cloudlibrary.library.infrastructure.feign.lending.requestbody.LibraryRulesUpdateRequest;
-import com.cloudlibrary.library.infrastructure.feign.lending.responsebody.LibraryRulesUpdateResponse;
-import com.cloudlibrary.library.ui.requestBody.LibraryUpdateRequest;
+import com.cloudlibrary.library.infrastructure.query.http.feign.lending.requestbody.LibraryRulesUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

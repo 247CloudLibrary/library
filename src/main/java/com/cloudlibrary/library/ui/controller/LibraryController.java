@@ -1,15 +1,13 @@
 package com.cloudlibrary.library.ui.controller;
 
 
-import com.cloudlibrary.library.application.domain.Library;
 import com.cloudlibrary.library.application.service.LibraryOperationUseCase;
 import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.exception.CloudLibraryException;
 import com.cloudlibrary.library.exception.MessageType;
 
-import com.cloudlibrary.library.infrastructure.feign.lending.requestbody.LibraryRulesUpdateRequest;
-import com.cloudlibrary.library.infrastructure.feign.lending.responsebody.LibraryRulesUpdateResponse;
-import com.cloudlibrary.library.infrastructure.feign.lending.service.FeignLendingService;
+import com.cloudlibrary.library.infrastructure.query.http.feign.lending.requestbody.LibraryRulesUpdateRequest;
+import com.cloudlibrary.library.infrastructure.query.http.feign.lending.service.FeignLendingService;
 import com.cloudlibrary.library.ui.requestBody.LibraryCreateRequest;
 import com.cloudlibrary.library.ui.requestBody.LibraryUpdateRequest;
 import com.cloudlibrary.library.ui.view.ApiResponseView;
@@ -22,7 +20,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

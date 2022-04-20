@@ -1,4 +1,4 @@
-package com.cloudlibrary.library.infrastructure.feign.lending.requestbody;
+package com.cloudlibrary.library.infrastructure.query.http.feign.lending.requestbody;
 
 
 import lombok.*;
