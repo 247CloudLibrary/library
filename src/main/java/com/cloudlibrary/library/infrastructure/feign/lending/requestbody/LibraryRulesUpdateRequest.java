@@ -1,15 +1,11 @@
 package com.cloudlibrary.library.infrastructure.feign.lending.requestbody;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
-@Setter
+@Builder
 @ToString
-@NoArgsConstructor
 public class LibraryRulesUpdateRequest {
 
 //  Lending 에서 libraryRules update에 사용 할 객체
