@@ -7,6 +7,9 @@ import com.cloudlibrary.library.application.service.LibraryReadUseCase;
 import com.cloudlibrary.library.exception.CloudLibraryException;
 import com.cloudlibrary.library.exception.MessageType;
 
+import com.cloudlibrary.library.infrastructure.feign.lending.requestbody.LibraryRulesUpdateRequest;
+import com.cloudlibrary.library.infrastructure.feign.lending.responsebody.LibraryRulesUpdateResponse;
+import com.cloudlibrary.library.infrastructure.feign.lending.service.FeignLendingService;
 import com.cloudlibrary.library.ui.requestBody.LibraryCreateRequest;
 import com.cloudlibrary.library.ui.requestBody.LibraryUpdateRequest;
 import com.cloudlibrary.library.ui.view.ApiResponseView;
@@ -33,11 +36,15 @@ public class LibraryController {
 
     private final LibraryReadUseCase libraryReadUseCase;
     private final LibraryOperationUseCase libraryOperationUseCase;
+    private final FeignLendingService feignLendingService;
 
     @Autowired
-    public LibraryController(LibraryReadUseCase libraryReadUseCase, LibraryOperationUseCase libraryOperationUseCase) {
+    public LibraryController(LibraryReadUseCase libraryReadUseCase,
+                             LibraryOperationUseCase libraryOperationUseCase,
+                             FeignLendingService feignLendingService) {
         this.libraryReadUseCase = libraryReadUseCase;
         this.libraryOperationUseCase = libraryOperationUseCase;
+        this.feignLendingService = feignLendingService;
     }
 
     @GetMapping("/health-check")
@@ -75,10 +82,21 @@ public class LibraryController {
             throw new CloudLibraryException(MessageType.INTERNAL_SERVER_ERROR);
         }
 
+        var libraryRules = LibraryRulesUpdateRequest.builder()
+                .libraryId(request.getId())
+                .libraryName(request.getName())
+                .lendingAvailableCount(request.getLendingAvailableCount())
+                .lendingAvailableDays(request.getLendingAvailableDays())
+                .overdueCount(request.getOverdueCount())
+                .longtermOverdueDays(request.getLongtermOverdueDays())
+                .lendingLimitDays(request.getLendingLimitDays())
+                .build();
+
+        feignLendingService.patchLibraryRules(libraryRules);
+
         return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
 
     }
-
     @GetMapping("")
     public ResponseEntity<ApiResponseView<List<LibraryView>>> getLibraries(){
 
@@ -128,6 +146,8 @@ public class LibraryController {
                 .id(libraryFindQuery.getLibraryId())
                 .build();
 
+        feignLendingService.withDrawLibraryRules(id);
+
         return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(result)));
     }
 
@@ -156,6 +176,19 @@ public class LibraryController {
             throw new CloudLibraryException(MessageType.INTERNAL_SERVER_ERROR);
         }
 
+        var libraryRules = LibraryRulesUpdateRequest.builder()
+                .libraryId(request.getId())
+                .libraryName(request.getName())
+                .lendingAvailableCount(request.getLendingAvailableCount())
+                .lendingAvailableDays(request.getLendingAvailableDays())
+                .overdueCount(request.getOverdueCount())
+                .longtermOverdueDays(request.getLongtermOverdueDays())
+                .lendingLimitDays(request.getLendingLimitDays())
+                .build();
+
+        feignLendingService.patchLibraryRules(libraryRules);
+
         return ResponseEntity.ok(new ApiResponseView<>(new LibraryView(updatedLibrary)));
     }
+
 }
