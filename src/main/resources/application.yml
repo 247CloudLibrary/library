@@ -1,13 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://cloudlibrary-librarydb.cscg6f0frodu.us-east-1.rds.amazonaws.com/CloudLibrary_libraryDB?serverTimezone=UTC&characterEncoding=UTF-8
-    username: yongcloud
-    password: djk!00200
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: cloudlibrary/rds/library/mysql
+    username: cloudlibrary/rds/library/mysql
+    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
 
   jpa:
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
