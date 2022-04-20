@@ -1,6 +1,5 @@
 package com.cloudlibrary.library.infrastructure.query.http.feign.lending.service;
 
-import com.cloudlibrary.library.infrastructure.query.http.feign.lending.configuration.FeignConfiguration;
 import com.cloudlibrary.library.infrastructure.query.http.feign.lending.doc.FeignInfo;
 import com.cloudlibrary.library.infrastructure.query.http.feign.lending.requestbody.LibraryRulesUpdateRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
-@FeignClient(value = FeignInfo.VALUE, url = FeignInfo.URI, configuration = FeignConfiguration.class)
+@FeignClient(value = FeignInfo.VALUE, url = FeignInfo.URI)
 @Component
 public interface LendingFeignClient {
 
